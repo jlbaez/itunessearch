@@ -25,10 +25,10 @@ type SearchResult struct {
 	FeedUrl string `json:"feedUrl" bson:"feedUrl"`
 }
 
-func Search(query string, mediaType string, limit uint) []SearchResult {
+func Search(query string, mediaType string, limit uint) ([]SearchResult, error)  {
 	baseUrl, err := url.Parse(itunesSearchURl)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	params := url.Values{}
@@ -42,20 +42,20 @@ func Search(query string, mediaType string, limit uint) []SearchResult {
 
 	resp, err := http.Get(baseUrl.String())
 	if err != nil {
-		log.Fatal(err)
+		return nil,err
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	var response SearchResponse
 
 	err = json.Unmarshal([]byte(body), &response)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return response.Results;
+	return response.Results, nil;
 }
