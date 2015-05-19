@@ -38,8 +38,6 @@ func Search(query string, mediaType string, limit uint) ([]SearchResult, error) 
 
 	baseUrl.RawQuery = params.Encode()
 
-	log.Printf("search url: %s", baseUrl)
-
 	resp, err := http.Get(baseUrl.String())
 	if err != nil {
 		return nil,err
